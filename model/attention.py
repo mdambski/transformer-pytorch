@@ -29,7 +29,7 @@ def attention(
 
 class MultiHeadedAttention(nn.Module):
     def __init__(self, head_size, d_model, dropout=0.1):
-        "Take in model size and number of heads."
+        """Take in model size and number of heads."""
         super(MultiHeadedAttention, self).__init__()
         assert d_model % head_size == 0
         # We assume d_v always equals d_k
@@ -40,7 +40,7 @@ class MultiHeadedAttention(nn.Module):
         self.dropout = nn.Dropout(p=dropout)
 
     def forward(self, query, key, value, mask=None):
-        "Implements Figure 2"
+        """Implements Figure 2"""
         if mask is not None:
             mask = mask.unsqueeze(1)
 
