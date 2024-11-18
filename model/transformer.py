@@ -23,7 +23,9 @@ class Transformer(nn.Module):
         self.tgt_embedding = tgt_embedding
         self.generator = generator
 
-    def forward(self, src: Tensor, tgt: Tensor, src_mask: Tensor, tgt_mask: Tensor):
+    def forward(
+        self, src: Tensor, tgt: Tensor, src_mask: Tensor, tgt_mask: Tensor
+    ) -> Tensor:
         """Take in and process masked src and tgt sequences."""
         enc_out = self.encode(src, src_mask)
         dec_out = self.decode(enc_out, src_mask, tgt, tgt_mask)
@@ -35,12 +37,12 @@ class Transformer(nn.Module):
         src_mask: Tensor,
         tgt: Tensor,
         tgt_mask: Tensor,
-    ):
+    ) -> Tensor:
         x = self.tgt_embedding(tgt)
-        out = self.decoder(x, encoded_src, src_mask, tgt_mask)
+        out: Tensor = self.decoder(x, encoded_src, src_mask, tgt_mask)
         return out
 
-    def encode(self, src: Tensor, src_mask: Tensor):
+    def encode(self, src: Tensor, src_mask: Tensor) -> Tensor:
         x = self.src_embedding(src)
-        out = self.encoder(x, src_mask)
+        out: Tensor = self.encoder(x, src_mask)
         return out

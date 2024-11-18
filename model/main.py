@@ -17,7 +17,7 @@ def make_model(
     d_feed_forward: int = 2048,
     head_size: int = 8,
     dropout: float = 0.1,
-):
+) -> Transformer:
     """
     Builds a Transformer model based on the given hyper-parameters.
 

@@ -11,10 +11,30 @@ python = "^3.11"
 torch = "^2.5.1"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "ruff"
+pytest = "^8.3.3"
 ruff = "^0.7.4"
 mypy = "^1.13.0"
+pre-commit = "^4.0.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.11"
+exclude = ["tests"]
+
+warn_unused_configs = "True"
+disallow_any_generics = "True"
+disallow_subclassing_any = "True"
+disallow_untyped_calls = "True"
+disallow_untyped_defs = "True"
+disallow_incomplete_defs = "True"
+check_untyped_defs = "True"
+disallow_untyped_decorators = "True"
+warn_redundant_casts = "True"
+warn_unused_ignores = "True"
+warn_return_any = "False"
+no_implicit_reexport = "True"
+strict_equality = "True"
+extra_checks = "True"

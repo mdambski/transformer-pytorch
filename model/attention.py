@@ -28,27 +28,31 @@ def attention(
 
 
 class MultiHeadedAttention(nn.Module):
-    def __init__(self, head_size, d_model, dropout=0.1):
+    def __init__(self, head_size: int, d_model: int, dropout: float = 0.1):
         """Take in model size and number of heads."""
         super(MultiHeadedAttention, self).__init__()
-        assert d_model % head_size == 0
-        # We assume d_v always equals d_k
-        self.d_k = d_model // head_size
-        self.h = head_size
-        self.linears = clones(nn.Linear(d_model, d_model), 4)
-        self.attn = None
-        self.dropout = nn.Dropout(p=dropout)
 
-    def forward(self, query, key, value, mask=None):
-        """Implements Figure 2"""
+        if d_model % head_size != 0:
+            raise ValueError("Incompatible hyper-parameters: d_model and head_size")
+
+        self.d_k = d_model // head_size
+
+        self.head_size = head_size
+        self.linears = clones(nn.Linear(d_model, d_model), 4)
+        self.dropout = nn.Dropout(p=dropout)
+        self.attn: Optional[Tensor] = None
+
+    def forward(
+        self, query: Tensor, key: Tensor, value: Tensor, mask: Optional[Tensor] = None
+    ) -> Tensor:
         if mask is not None:
             mask = mask.unsqueeze(1)
 
-        nbatches = query.size(0)
+        n_batches = query.size(0)
 
         # 1) Do all the linear projections in batch from d_model => h x d_k
         query, key, value = [
-            lin(x).view(nbatches, -1, self.h, self.d_k).transpose(1, 2)
+            lin(x).view(n_batches, -1, self.head_size, self.d_k).transpose(1, 2)
             for lin, x in zip(self.linears, (query, key, value))
         ]
 
@@ -56,8 +60,14 @@ class MultiHeadedAttention(nn.Module):
         x, self.attn = attention(query, key, value, mask=mask, dropout=self.dropout)
 
         # 3) "Concat" using a view and apply a final linear.
-        x = x.transpose(1, 2).contiguous().view(nbatches, -1, self.h * self.d_k)
+        x = (
+            x.transpose(1, 2)
+            .contiguous()
+            .view(n_batches, -1, self.head_size * self.d_k)
+        )
+
         del query
         del key
         del value
+
         return self.linears[-1](x)

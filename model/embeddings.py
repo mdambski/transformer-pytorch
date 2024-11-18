@@ -5,7 +5,7 @@ from torch import nn as nn, Tensor
 
 
 class Embeddings(nn.Module):
-    def __init__(self, model_dimensions: int, vocab: int):
+    def __init__(self, model_dimensions: int, vocab: int) -> None:
         super(Embeddings, self).__init__()
         self.embedding = nn.Embedding(vocab, model_dimensions)
         self.model_dimensions = model_dimensions
@@ -15,7 +15,7 @@ class Embeddings(nn.Module):
 
 
 class PositionalEmbeddings(nn.Module):
-    def __init__(self, d_model: int, dropout, max_len=5000):
+    def __init__(self, d_model: int, dropout: float, max_len: int = 5000) -> None:
         super(PositionalEmbeddings, self).__init__()
         self.dropout = nn.Dropout(p=dropout)
 
