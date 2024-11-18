@@ -2,7 +2,7 @@
 name = "transformer-pytorch"
 version = "0.1.0"
 description = "Transformer model implemented in PyTorch"
-authors = ["Marcin Dąmbski <19229917+mdambski@users.noreply.github.com>"]
+authors = ["Marcin Dąmbski <name.surname[at]gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
